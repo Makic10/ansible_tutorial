@@ -8,12 +8,22 @@
     apt:
       update_cache: yes
 
-  - name: remove apache2 package
+  - name: remove apache2 package ubuntu
     apt:
       name: apache2
       state: absent
 
-  - name: remove php support for apache
+  - name: remove php support for apache ubuntu
     apt:
       name:  libapache2-mod-php
+      state: absent
+
+  - name: remove apache2 package centos
+    dnf:
+      name: httpd
+      state: absent
+
+  - name: remove php support for apache centos
+    dnf:
+      name:  php
       state: absent
