@@ -1,0 +1,5 @@
+- name: add ssh key simone
+  tags: always
+  authorized_key:
+    user: simone
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOroI50uwkrWq2n/zdbJ3uWsn9pDwXIbAM2UUfHzgSyg mrki@mrki-VirtualBox"
