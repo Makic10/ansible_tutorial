@@ -1,4 +1,9 @@
-192.168.10.8 apache_package=apache2 php_package=libapache2-mod-php
-192.168.10.9 apache_package=apache2 php_package=libapache2-mod-php
-192.168.10.10 apache_package=apache2 php_package=libapache2-mod-php
-192.168.10.11 apache_package=httpd php_package=php
+[web_servers]
+192.168.10.8 
+192.168.10.11
+
+[db_servers]
+192.168.10.9
+
+[file_servers]
+192.168.10.10
