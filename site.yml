@@ -7,18 +7,44 @@
   - name: install updates (CentOS)
     tags: always
     dnf:
-     update_only: yes
      update_cache: yes
+    changed_when: false
     when: ansible_distribution == "CentOS"
 
   - name: install updates  (Ubuntu)
     tags: always
     apt:
-     upgrade: dist
      update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
 
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: add ssh key simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOroI50uwkrWq2n/zdbJ3uWsn9pDwXIbAM2UUfHzgSyg mrki@mrki-VirtualBox" 
+  
+- hosts: workstations
+  become: true
+  tasks:
+
+  - name: isntall unzip
+    package:
+      name: unzip
+
+  - name: isntall teraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
 
 - hosts: web_servers
   become: true
@@ -52,6 +78,29 @@
       group: root
       mode: 0644
 
+  - name: start httpd (centos)
+    tags: centos,apache,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: chane e-mail addres fro admin
+    tags: apache,centos,httpd
+    lineinfile: 
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin somebody@somehere.net
+    when: ansible_distribution == "CentOS"
+    register: httpd
+
+  - name: restart httpd (centos)
+    tags: apache,centos,httpd
+    service:
+      name: httpd 
+      state: restarted
+    when: httpd.changed
 
 - hosts: db_servers
   become: true
